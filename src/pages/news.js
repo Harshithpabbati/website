@@ -13,11 +13,13 @@ const News = ({
 }) => {
   const [query, setQuery] = useState('');
   const filter = edges.filter((edge) => {
-    if (edge.node.frontmatter.title.toLowerCase().startsWith(query.toLowerCase()))
+    if (
+      edge.node.frontmatter.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    )
       return 1;
   });
   const Articles = filter.map((edge) => (
-    <div key={edge.node.id} className="p-2">
+    <div key={edge.node.id} className="col-sm-12 col-md-6 p-3">
       <NewsCard article={edge.node.frontmatter} />
     </div>
   ));
@@ -28,11 +30,11 @@ const News = ({
       <TitleBar title="News" />
       <div className="row m-0 p-1">
         <div className="col-md-8 col-lg-9 p-2 order-2 order-md-1">
-          <div className="row mx-2 my-4">{Articles}</div>
+          <div className="row m-0">{Articles}</div>
         </div>
         <div className="col-md-4 col-lg-3 order-md-2 order-1 px-2 py-4">
           <div
-            className="card p-4 position-sticky"
+            className="card-no-hover p-4 position-sticky"
             style={{ top: '1rem' }}
             id="filter-card"
           >
@@ -73,7 +75,7 @@ export const pageQuery = graphql`
             description
             cover {
               childImageSharp {
-                resize(width: 500, height: 300) {
+                fluid {
                   src
                 }
               }
